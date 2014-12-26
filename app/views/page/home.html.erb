@@ -1,0 +1,10 @@
+<% if current_user %>
+  <%= link_to "Signout", destroy_user_session_path, method: :delete %>
+  <%= link_to "Edit Profile", edit_user_registration_path %>
+<% else %>
+  <%= link_to "Sign In", new_user_session_path %>
+  <%= link_to "Sign Up", new_user_registration_path %>
+<% end %>
+
+<h1>Page#home</h1>
+<p>Find me in app/views/page/home.html.erb</p>
