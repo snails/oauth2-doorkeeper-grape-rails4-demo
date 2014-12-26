@@ -9,7 +9,7 @@
 * rack-oauth2 1.0.9
 * doorkeeper 2.0.1
 
-截止2013年12月26日最新版
+截止2014年12月26日最新版
 
 #Tutorial
 
@@ -29,5 +29,15 @@
 2. run `db:migrate`
 3. run `rails s`
 4. You can see all the avariable api through the browser in `/api` path.
+
+#some snapshots
+
+1.Generate AccessToken
+ ![generate token](https://raw.githubusercontent.com/snails/oauth2-doorkeeper-grape-rails4-demo/master/img/1.get_access_token.png)
+2.update_write access token work
+![2.update_write_token_success_snapshot](https://raw.githubusercontent.com/snails/oauth2-doorkeeper-grape-rails4-demo/master/img/2.update_write_token_success_snapshot.png)
+3.update_write_token_cannot_use_in_the_other
+![3.update_write_token_cannot_use_in_the_other](https://raw.githubusercontent.com/snails/oauth2-doorkeeper-grape-rails4-demo/master/img/3.update_write_token_cannot_use_in_the_other.png)
+
 
 #Copyright &copy; DavidWei CC
