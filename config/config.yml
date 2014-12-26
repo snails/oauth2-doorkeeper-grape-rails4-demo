@@ -1,0 +1,12 @@
+defaults: &defaults
+  devise_secret_key: f1d31f55c9d344ac423b25c0727cc5d6f7e76d1bcae993bf4774cb54a85da6e784a826f7af8bc8fb4e3491d9e3c3465b311eb88d79dd9bb1c2a0150f08c737a8
+  domain: local.dev:3000
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  devise_secret_key: ENV['DEVISE_SECRET_KEY']

@@ -20,6 +20,10 @@ gem 'jquery-rails'
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-gem 'doorkeeper'
-gem 'devise'
+gem 'doorkeeper', '2.0.1'
+gem 'devise', '3.4.1'
 gem 'rack-oauth2', '1.0.9'
+gem 'settingslogic', '2.0.9'
+
+gem 'grape', '0.10.0'
+gem 'grape-entity', '0.4.4'

@@ -4,4 +4,7 @@ class PageController < ApplicationController
 
   def help
   end
+
+  def api
+  end
 end
