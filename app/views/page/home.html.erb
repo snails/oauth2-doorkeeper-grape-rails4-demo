@@ -1,6 +1,10 @@
 <% if current_user %>
   <%= link_to "Signout", destroy_user_session_path, method: :delete %>
   <%= link_to "Edit Profile", edit_user_registration_path %>
+  <%= link_to "New App", new_oauth_application_path %>
+  <%= link_to "All Apps", oauth_applications_path %>
+  <%= link_to "Authorized App", oauth_authorized_applications_path %>
+  <%= link_to "Token Info", oauth_token_info_path %>
 <% else %>
   <%= link_to "Sign In", new_user_session_path %>
   <%= link_to "Sign Up", new_user_registration_path %>
