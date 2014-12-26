@@ -20,8 +20,10 @@ module Demo
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.paths.add 'app/grape', glob: "**/*.rb"
+    config.autoload_paths += Dir["#{Rails.root}/app/grape/*"]
 
-    config.watchable_dirs['#{Rails.root}/app/grape'] = [:rb]
-    config.autoload_paths += %W(#{config.root}/app/grape)
+    # config.middleware.use Rack::OAuth2::Server::Resource::Bearer do |req|
+      # AccessToken.valid.find_by_token(req.access_token) || req.invalid_token!
+    # end
   end
 end

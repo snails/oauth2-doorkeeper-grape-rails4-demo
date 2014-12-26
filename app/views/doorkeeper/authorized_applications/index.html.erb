@@ -8,9 +8,8 @@
     <tr>
       <th>Application</th>
       <th>Created At</th>
-      <th>Clientid</th>
-      <th>Secrets</th>
-      <th>Handle</th>
+      <th></th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
@@ -18,8 +17,6 @@
       <tr>
         <td><%= application.name %></td>
         <td><%= application.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-        <td><%= application.client_id %></td>
-        <td><%= application.secret %></td>
         <td><%= render 'delete_form', application: application %></td>
       </tr>
     <% end %>

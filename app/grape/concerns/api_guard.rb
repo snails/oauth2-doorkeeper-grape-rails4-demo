@@ -1,7 +1,5 @@
 # Guard API with OAuth 2.0 Access Token
 
-require 'rack/oauth2'
-
 module APIGuard
   extend ActiveSupport::Concern
 
@@ -13,6 +11,7 @@ module APIGuard
       # Must yield access token to store it in the env
       request.access_token
     end
+
 
     helpers HelperMethods
 
@@ -46,12 +45,13 @@ module APIGuard
 
       if token_string.blank?
         raise MissingTokenError
-
-      elsif (access_token = find_access_token(token_string)).nil?
+     
+      #access_scope is the value of the 'scopes' in db
+      elsif (access_scopes = find_access_token(token_string)).nil?
         raise TokenNotFoundError
 
       else
-        case validate_access_token(access_token, scopes)
+        case validate_access_token(access_scopes, scopes)
         when Oauth2::AccessTokenValidationService::INSUFFICIENT_SCOPE
           raise InsufficientScopeError.new(scopes)
 
@@ -62,8 +62,8 @@ module APIGuard
           raise RevokedError
 
         when Oauth2::AccessTokenValidationService::VALID
+          access_token = Doorkeeper::AccessToken.where(token: token_string).first
           @current_user = User.find(access_token.resource_owner_id)
-
         end
       end
     end
@@ -80,7 +80,7 @@ module APIGuard
     end
 
     def find_access_token(token_string)
-      Doorkeeper::AccessToken.authenticate(token_string)
+      Doorkeeper::AccessToken.where(token: token_string).first
     end
 
     def validate_access_token(access_token, scopes)
@@ -113,32 +113,32 @@ module APIGuard
     def oauth2_bearer_token_error_handler
       Proc.new {|e|
         response = case e
-          when MissingTokenError
-            Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new
+                   when MissingTokenError
+                     Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new
 
-          when TokenNotFoundError
-            Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-              :invalid_token,
-              "Bad Access Token.")
+                   when TokenNotFoundError
+                     Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+                       :invalid_token,
+                       "Bad Access Token.")
 
-          when ExpiredError
-            Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-              :invalid_token,
-              "Token is expired. You can either do re-authorization or token refresh.")
+                   when ExpiredError
+                     Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+                       :invalid_token,
+                       "Token is expired. You can either do re-authorization or token refresh.")
 
-          when RevokedError
-            Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-              :invalid_token,
-              "Token was revoked. You have to re-authorize from the user.")
+                   when RevokedError
+                     Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+                       :invalid_token,
+                       "Token was revoked. You have to re-authorize from the user.")
 
-          when InsufficientScopeError
-            # FIXME: ForbiddenError (inherited from Bearer::Forbidden of Rack::Oauth2)
-            # does not include WWW-Authenticate header, which breaks the standard.
-            Rack::OAuth2::Server::Resource::Bearer::Forbidden.new(
-              :insufficient_scope,
-              Rack::OAuth2::Server::Resource::ErrorMethods::DEFAULT_DESCRIPTION[:insufficient_scope],
-              { :scope => e.scopes})
-          end
+                   when InsufficientScopeError
+                     # FIXME: ForbiddenError (inherited from Bearer::Forbidden of Rack::Oauth2)
+                     # does not include WWW-Authenticate header, which breaks the standard.
+                     Rack::OAuth2::Server::Resource::Bearer::Forbidden.new(
+                       :insufficient_scope,
+                       Rack::OAuth2::Server::Resource::ErrorMethods::DEFAULT_DESCRIPTION[:insufficient_scope],
+                       { :scope => e.scopes})
+                   end
 
         response.finish
       }

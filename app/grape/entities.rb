@@ -5,7 +5,7 @@ module DemoAPI
     end
 
     class Application < Grape::Entity
-      expose :uid, :secret
+      expose :name, :uid, :secret
     end
 
   end 
